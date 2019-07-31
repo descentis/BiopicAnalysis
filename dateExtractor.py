@@ -29,7 +29,7 @@ def getReleaseDate(movie) :
         if not found :
                 # print("Movie not found")
                 return None
-        print(imdbID)
+        #print(imdbID)
         req = "https://movie-database-imdb-alternative.p.rapidapi.com/?i="+imdbID+"&r=json"
         response = unirest.get(req,
                         headers={
@@ -38,8 +38,8 @@ def getReleaseDate(movie) :
                         }
                         )
         di = json.loads(response.raw_body)
-        print(di["Title"])
-        print(di["Released"])
+        #print(di["Title"])
+        #print(di["Released"])
         return di["Released"]
 
 # movie = "Interstellar"
@@ -54,14 +54,17 @@ releaseDateInfo = {}
 notFoundList = []
 for i in range(len(movies)) :
         name, url = movies[i].split("||")
-        date = getReleaseDate(name)
+        try:
+        	date = getReleaseDate(name)
+        except:
+        	pass	
         if date == None :
-                print("Info not fetched for", name, url)
+                #print("Info not fetched for", name, url)
                 notFoundList.append(name)
                 continue
         else :
                 releaseDateInfo[name] = date
-        print(i+1, "movies processed")
+        #print(i+1, "movies processed")
 
 with open("releaseDates.json", "w+") as f :
         json.dump(releaseDateInfo, f)
